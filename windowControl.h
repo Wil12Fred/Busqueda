@@ -19,6 +19,10 @@ void keyPress(int key,int x,int y){
 		CAMARA.move(0,-15*1/CAMARA.rotate);
 	} else if(key==GLUT_KEY_DOWN){//mover abajo
 		CAMARA.move(0,15*1/CAMARA.rotate);
+	} else if(key==GLUT_KEY_F1){
+		CAMARA.opcionHeuristica=false;
+	} else if(key==GLUT_KEY_F2){
+		CAMARA.opcionHeuristica=true;
 	} else {
 		CAMARA.transform=false;
 	}

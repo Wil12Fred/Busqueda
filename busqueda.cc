@@ -31,16 +31,28 @@ void renderScene(void){
 		glLoadIdentity();
 		glScalef(CAMARA.rotate,CAMARA.rotate,1.0f);//Realizar transformación de escala (zoom_in(x2), zoom_out(x.5))
 		graficarAristasDeGrafo(&grafo);//Graficar la escena con la traslación de camara
-		//graficarCaminoDeGrafoProfundidad(&grafo,0,grafo.size-1);
-		graficarCaminoMejorElPrimero(&grafo,0,grafo.size-1);
+		if(!CAMARA.opcionHeuristica)
+			graficarCaminoDeGrafoProfundidad(&grafo,0,grafo.size-1);
+		else 
+			graficarCaminoMejorElPrimero(&grafo,0,grafo.size-1);
 		CAMARA.transform=false;//Se realizo todas las transformaciones
 		glutSwapBuffers();
 	}
 }
 
 int main(int argc, char **argv){
+	cout << "Numero de Nodos: ";
+	int n;
+	cin >> n;
 	SeedXorShift();
-	crearGrafo(100,&grafo);
+	crearGrafo(n,&grafo);
+	cout << "Opcion 1: Busqueda en Profundidad" << endl;
+	cout << "Opcion 2: Heuristica Mejor el Primero" << endl;
+	int opcion;
+	cin >> opcion;
+	if(opcion==2){
+		CAMARA.opcionHeuristica=true;
+	}
 	//Iniciando propiedades de la ventana
 	glutInit(&argc, argv);  
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);

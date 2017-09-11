@@ -79,8 +79,10 @@ struct Grafo{
 			}
 			for (auto it=nodos[here]->aristas.begin();it!=nodos[here]->aristas.end();it++){
 				if(!Visitado[it->first]){
-					visitados.push_back(make_pair(here,it->first));
-					Q.push(make_pair(((it->second)->punto-nodos[end]->punto).norm(),it->first));
+					if(Obstaculos.find(make_pair(here,it->first))==Obstaculos.end()){
+						visitados.push_back(make_pair(here,it->first));
+						Q.push(make_pair(((it->second)->punto-nodos[end]->punto).norm(),it->first));
+					}	
 				}
 			}
 		}

@@ -2,6 +2,7 @@
 * Camara básica en 2 dimensiones
 **/
 struct Camara{
+	bool opcionHeuristica=false;
 	double WIDTH = 850;
 	double HEIGHT = 850;
 	double rotate = 1;
