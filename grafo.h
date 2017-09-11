@@ -37,7 +37,10 @@ struct Grafo{
 		}
 		return ((*pNodo).insertarArista(sNodo) && (*sNodo).insertarArista(pNodo));
 	}
-	bool bfs(int begin,int end, vector<pair<int,int> >& visitados){
+	bool bfs(int begin,int end, vector<pair<int,int> >& visitados, vector<int>& Anterior){
+		Anterior.resize(size);
+		Anterior[begin]=-1;
+		Anterior[end]=-1;
 		bool Visitado[size];
 		for (int i=0;i<size;i++){
 			Visitado[i]=0;
@@ -49,12 +52,15 @@ struct Grafo{
 		while(i<BFS.size()){
 			for (auto it=(*BFS[i]).aristas.begin();it!=(*BFS[i]).aristas.end();it++){
 				if(Obstaculos.find(make_pair(BFS[i]->ID,it->first))==Obstaculos.end()){
-					visitados.push_back(make_pair(BFS[i]->ID,it->first));
 					if(it->first==end){
+						Anterior[it->first]=BFS[i]->ID;
+						visitados.push_back(make_pair(BFS[i]->ID,it->first));
 						return true;
 					}
 					if(!Visitado[it->first]){
+						visitados.push_back(make_pair(BFS[i]->ID,it->first));
 						Visitado[it->first]=1;
+						Anterior[it->first]=BFS[i]->ID;
 						BFS.push_back(it->second);
 					}
 				}
@@ -63,13 +69,17 @@ struct Grafo{
 		}
 		return false;
 	}
-	bool mejorElPrimero(int begin,int end, vector<pair<int,int> >& visitados){
+	bool mejorElPrimero(int begin,int end, vector<pair<int,int> >& visitados,vector<int>& Anterior){
+		Anterior.resize(size);
+		Anterior[begin]=-1;
+		Anterior[end]=-1;
 		priority_queue<pair<double,int>,vector<pair<double,int> >,greater<pair<double,int> > > Q;
 		Q.push(make_pair((nodos[begin]->punto-nodos[end]->punto).norm(),begin));
 		bool Visitado[size];
 		for (int i=0;i<size;i++){
 			Visitado[i]=0;
 		}
+		Visitado[begin]=1;
 		while(!Q.empty()){
 			pair<long,int> p=Q.top();
 			Q.pop();
@@ -80,6 +90,8 @@ struct Grafo{
 			for (auto it=nodos[here]->aristas.begin();it!=nodos[here]->aristas.end();it++){
 				if(!Visitado[it->first]){
 					if(Obstaculos.find(make_pair(here,it->first))==Obstaculos.end()){
+						Visitado[it->first]=1;
+						Anterior[it->first]=here;
 						visitados.push_back(make_pair(here,it->first));
 						Q.push(make_pair(((it->second)->punto-nodos[end]->punto).norm(),it->first));
 					}	
